@@ -22,10 +22,8 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 private slots:
-
-    void on_action_Exit_triggered();
-
     void on_actionAbout_triggered();
+    void on_actionExit_triggered();
 
 private:
     Ui::MainWindow *ui;

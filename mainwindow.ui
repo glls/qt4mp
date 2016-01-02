@@ -30,7 +30,9 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
-    <addaction name="action_Exit"/>
+    <addaction name="actionConfigure"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -52,22 +54,20 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionLoadFile">
+  <action name="actionOpen">
    <property name="text">
-    <string>LoadFile</string>
+    <string>&amp;Open</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionOpen">
-   <property name="text">
-    <string>&amp;Open</string>
-   </property>
-  </action>
   <action name="actionSave">
    <property name="text">
     <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -80,12 +80,23 @@
     <string>Contents</string>
    </property>
   </action>
-  <action name="action_Exit">
+  <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
    <property name="toolTip">
     <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionConfigure">
+   <property name="text">
+    <string>Confi&amp;gure</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>

@@ -53,14 +53,6 @@ void MainWindow::readSettings()
     this->resize(settings.value("mainwindow/size", QSize(320,200)).toSize());
 }
 
-void MainWindow::on_action_Exit_triggered()
-{
-    qApp->aboutQt();
-    qApp->quit();
-    // use exit to return code
-    //qApp->exit();
-}
-
 void MainWindow::on_actionAbout_triggered()
 {
     QString text = QString("<h2>%3</h2>Version %1<br>"
@@ -72,4 +64,9 @@ void MainWindow::on_actionAbout_triggered()
 
     QMessageBox::about(this, "About "+(qApp->applicationName()),
                        text);
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    close();
 }
