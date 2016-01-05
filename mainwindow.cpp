@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // add some default actions dynamicaly
+    QAction *tba = ui->mainToolBar->toggleViewAction();
+    ui->menuBar->insertAction(ui->actionViewStatusbar, tba);
     readSettings();
 }
 
