@@ -13,10 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    consolerunner.cpp
 
 HEADERS  += mainwindow.h \
-    config.h
+    config.h \
+    consolerunner.h
 
 FORMS    += mainwindow.ui
 

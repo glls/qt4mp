@@ -22,8 +22,10 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 private slots:
-    void on_actionAbout_triggered();
-    void on_actionExit_triggered();
+    void toggleStatusbar();
+    void readyReadStandardOutput();
+    void on_actionAbout_triggered();    
+    void on_actionRun_triggered();    
 
 private:
     Ui::MainWindow *ui;

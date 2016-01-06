@@ -2,18 +2,27 @@
 #include "ui_mainwindow.h"
 
 #include "config.h"
+#include "consolerunner.h"
 
 #include <QDesktopWidget>
 #include <QMessageBox>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    // add some default actions dynamicaly
-    QAction *tba = ui->mainToolBar->toggleViewAction();
-    ui->menuBar->insertAction(ui->actionViewStatusbar, tba);
+
+    ui->actionViewStatusbar->setCheckable(true);
+    ui->actionViewStatusbar->setChecked(true);
+    // add toggleViewAction to menu
+    ui->menuWindow->insertAction(ui->actionViewStatusbar, ui->mainToolBar->toggleViewAction());
+
+    //connect
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->actionViewStatusbar, SIGNAL(triggered()), this, SLOT(toggleStatusbar()));
+
     readSettings();
 }
 
@@ -69,7 +78,42 @@ void MainWindow::on_actionAbout_triggered()
                        text);
 }
 
-void MainWindow::on_actionExit_triggered()
+void MainWindow::toggleStatusbar()
 {
-    close();
+    if (ui->actionViewStatusbar->isChecked()) {
+        ui->statusBar->show();
+    } else {
+        ui->statusBar->hide();
+    }
+}
+
+void MainWindow::on_actionRun_triggered()
+{
+    QProcess p;
+    QString program;
+    QStringList arguments;
+#ifdef Q_OS_WIN
+    program = "cmd";
+    arguments << "/c dir /s C:\\qt\\";
+#elif
+    program = "ls";
+    arguments << "-R /tmp";
+#endif
+    ConsoleRunner cr;
+
+    ui->plainTextEdit->appendPlainText("running  console app");
+    QObject::connect(&p, SIGNAL(finished(int,QProcess::ExitStatus)), &cr, SLOT(finished(int, QProcess::ExitStatus)));
+    //QObject::connect(&p, SIGNAL(readyReadStandardOutput()), &cr, SLOT(readyReadStandardOutput()));
+    QObject::connect(&p, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+    QObject::connect(&p, SIGNAL(started()), &cr, SLOT(started()));
+
+    p.start(program, arguments);
+    p.waitForFinished();
+}
+
+void MainWindow::readyReadStandardOutput()
+{
+    QProcess *p = (QProcess *)sender();
+    QByteArray buf = p->readAllStandardOutput();
+    ui->plainTextEdit->appendPlainText(buf);
 }
