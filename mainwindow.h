@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QProcess>
 
 namespace Ui {
 class MainWindow;
@@ -27,9 +28,11 @@ private slots:
     void on_actionAbout_triggered();    
     void on_actionRun_triggered();    
 
+    void on_plainTextEdit_textChanged();
+
 private:
     Ui::MainWindow *ui;
-
+    QProcess m_process;
 };
 
 #endif // MAINWINDOW_H

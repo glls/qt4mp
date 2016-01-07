@@ -3,5 +3,6 @@
         <file>icons/document-new.svg</file>
         <file>icons/document-open.svg</file>
         <file>icons/document-save.svg</file>
+        <file>icons/system-log-out.svg</file>
     </qresource>
 </RCC>

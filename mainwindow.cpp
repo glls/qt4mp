@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionViewStatusbar, SIGNAL(triggered()), this, SLOT(toggleStatusbar()));
 
+    setUnifiedTitleAndToolBarOnMac(true);
     readSettings();
 }
 
@@ -52,7 +53,7 @@ void MainWindow::writeSettings()
     QSettings settings(qApp->applicationName()+".ini", QSettings::IniFormat);
     // if running on debug mode display where .ini is stored
 #ifdef QT_DEBUG
-    qDebug(settings.fileName().toStdString().c_str());
+    qDebug() << settings.fileName().toStdString().c_str();
 #endif
     settings.beginGroup("mainwindow");
     settings.setValue("size", this->size());
@@ -92,31 +93,40 @@ void MainWindow::toggleStatusbar()
 
 void MainWindow::on_actionRun_triggered()
 {
-    QProcess p;
     QString program;
     QStringList arguments;
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     program = "cmd";
     arguments << "/c dir /s C:\\qt\\";
-#elif defined Q_OS_MAC
+#elif defined Q_WS_MAC
     program = "open";
     arguments << "/";
+#elif defined Q_WS_X11
+    program = "lsb_release";
+    arguments << "-a";
 #endif
+
     ConsoleRunner cr;
 
     ui->plainTextEdit->appendPlainText("running  console app "+program);
-    QObject::connect(&p, SIGNAL(finished(int,QProcess::ExitStatus)), &cr, SLOT(finished(int, QProcess::ExitStatus)));
+    QObject::connect(&m_process, SIGNAL(finished(int,QProcess::ExitStatus)), &cr, SLOT(finished(int, QProcess::ExitStatus)));
     //QObject::connect(&p, SIGNAL(readyReadStandardOutput()), &cr, SLOT(readyReadStandardOutput()));
-    QObject::connect(&p, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
-    QObject::connect(&p, SIGNAL(started()), &cr, SLOT(started()));
+    QObject::connect(&m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
+    QObject::connect(&m_process, SIGNAL(started()), &cr, SLOT(started()));
 
-    p.start(program, arguments);
-    p.waitForFinished();
+    m_process.start(program, arguments);
+    m_process.waitForStarted();
+    m_process.waitForFinished();
+    m_process.closeWriteChannel();
 }
 
 void MainWindow::readyReadStandardOutput()
 {
     QProcess *p = (QProcess *)sender();
     QByteArray buf = p->readAllStandardOutput();
-    ui->plainTextEdit->appendPlainText(buf);
+    ui->plainTextEdit->appendHtml("<code>"+buf+"</code>");
+}
+
+void MainWindow::on_plainTextEdit_textChanged()
+{
 }

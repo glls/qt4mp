@@ -20,6 +20,7 @@ public slots:
     void error(QProcess::ProcessError error);
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
     void started();
+
 private:
     QProcess m_process;
     bool m_stopped;

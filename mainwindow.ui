@@ -34,6 +34,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="toolTipDuration">
+    <number>-7</number>
+   </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
@@ -119,6 +122,10 @@
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="resources/icons.qrc">
+     <normaloff>:/icons/system-log-out.svg</normaloff>:/icons/system-log-out.svg</iconset>
+   </property>
    <property name="text">
     <string>E&amp;xit</string>
    </property>
