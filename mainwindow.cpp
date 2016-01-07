@@ -7,12 +7,15 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QProcess>
+#include <QRegExp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setCentralWidget(ui->plainTextEdit);
 
     ui->actionViewStatusbar->setCheckable(true);
     ui->actionViewStatusbar->setChecked(true);
@@ -95,13 +98,13 @@ void MainWindow::on_actionRun_triggered()
 #ifdef Q_OS_WIN
     program = "cmd";
     arguments << "/c dir /s C:\\qt\\";
-#elif
-    program = "ls";
-    arguments << "-R /tmp";
+#elif defined Q_OS_MAC
+    program = "open";
+    arguments << "/";
 #endif
     ConsoleRunner cr;
 
-    ui->plainTextEdit->appendPlainText("running  console app");
+    ui->plainTextEdit->appendPlainText("running  console app "+program);
     QObject::connect(&p, SIGNAL(finished(int,QProcess::ExitStatus)), &cr, SLOT(finished(int, QProcess::ExitStatus)));
     //QObject::connect(&p, SIGNAL(readyReadStandardOutput()), &cr, SLOT(readyReadStandardOutput()));
     QObject::connect(&p, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
